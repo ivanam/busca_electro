@@ -1,0 +1,133 @@
+<style type="text/css">
+.wrap{
+  width: 30%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 100%);
+}
+.titulos {
+  font: small-caps 100% serif;
+  font-size: 130%;
+  color: #cf3919;
+}
+.precios{
+    color: #802a18;
+
+}
+
+.precio_anterior{
+  color:#3a1007;
+  text-decoration: line-through;
+}
+.local{
+   font-family: Arial, Helvetica, Verdana, sans-serif;
+   font-size: 180%;
+}
+</style>
+
+
+
+<center>
+  <div class="wrap">
+   <form action="" method="GET" class="form-horizontal" role="form">
+      <div class="form-group">
+          <input class="text" style="font-size:15px;" id="producto"></input>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="boton" class="btn btn-secondary btn-lg"><span class="glyphicon glyphicon-search"> </span></button>
+      </div>
+  </form>
+</div>
+</center>
+
+<%if @entriesArray != nil and @entriesArray2 != nil and @arrayMusimundo != nil%>
+<br></br>
+  <div class="col-xs-12 row">
+    <div class="col-xs-4">
+    <table class="table table-bordered table-condensed table-left">
+      <thead class ="thead-light" >
+    <tr>
+      <th class="local"><center>Frávega</center></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%@entriesArray.each do |en|%>
+      <tr>
+        <td>
+        <center><p><img src=<%=en.url%>></p></center>
+        <center><p class="titulos"><b><%= en.nombre%></b></p></center>
+        <center><h2><p class="precios"><strong><%= en.precio%></strong></p></h2></center>
+        <center><p>PRECIO ANTERIOR:<b class="precio_anterior"><%= en.precio_ant%></b></p></center>
+        <center><p><strong><%= en.cuotas%></strong></p></center>
+        <center><p></i><a class="glyphicon glyphicon-glyphicon-usd" href="<%=en.link%>"> COMPRAR </p></a></center>
+      </td>
+      </tr>
+    <% end %>
+  </tbody>
+  </table>
+</div>
+   <div class="col-xs-4">
+    <table class="table table-bordered table-condensed table-rigth">
+      <thead class ="thead-light" >
+    <tr>
+      <th class="local"><center>Mercado Libre</center></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%@entriesArray2.each do |en|%>
+      <tr>
+        <td>
+        <center><p><img src=<%=en.url%>></p></center>
+        <center><p class="titulos"><b><%= en.nombre%></b></p></center>
+        <center><h2><p class="precios"><strong>$<%= en.precio%></strong></p></h2></center>
+        <center><p></i><a class="glyphicon glyphicon-glyphicon-usd" href="<%=en.link%>"> COMPRAR</a></p></center>
+      </td>
+      </tr>
+    <% end %>
+  </tbody>
+  </table>
+</div>
+<div class="col-xs-4">
+    <table class="table table-bordered table-left">
+      <thead class ="thead-light" >
+    <tr>
+      <th class="local"><center>Musimundo</center></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%@arrayMusimundo.each do |en|%>
+      <tr>
+        <td>
+        <center><p><img src=<%=en.url%>></p></center>
+        <center><p class="titulos"><b><%= en.nombre%></b></p></center>
+        <center><h2><p class="precios"><strong><%= en.precio%></strong></p></h2></center>
+        <center><p><strong><%= en.cuotas%></strong></p></center>
+        <center><p></i><a class="glyphicon glyphicon-glyphicon-usd" href="<%=en.link%>"> COMPRAR </p></a></center>
+      </td>
+      </tr>
+    <% end %>
+  </tbody>
+  </table>
+</div>
+</div>
+<%end%>
+
+<%=@result%>
+
+<script type="text/javascript">
+
+  $( document ).ready(function() {
+      
+      $( "#boton" ).click( function() {
+
+      var producto = $( "#producto" ).val();
+      
+      window.location = "/buscador/"+producto;
+
+    });
+
+});
+</script>
+
+
+
+
+

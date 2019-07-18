@@ -1,0 +1,14 @@
+
+
+ <%@entriesArray.each do |en|%>
+  	<p><img src=<%=en%>></p>
+ <%end%>
+
+ <%@entriesArray.each do |en|%>
+  	<p><%image_tag en%></p>
+ <%end%>
+
+
+
+
+
