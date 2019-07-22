@@ -3,5 +3,7 @@ Rails.application.routes.draw do
   root 'application#scrape_reddit'
 
   get "/buscador/:data", to: 'buscador#buscar'
+
+  get "info", to: 'buscador#info', as: :info
  
 end

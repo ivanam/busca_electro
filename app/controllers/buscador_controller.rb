@@ -1,11 +1,18 @@
 class BuscadorController < ApplicationController
 
+def info
+
+	respond_to do |format|
+    	format.html
+    	format.js
+   	end
+end
 
  def buscar
     require 'open-uri'
     require 'mechanize'
     require 'ostruct'
-    cantidad_maxima = 2
+    cantidad_maxima = 5
 
 
     
@@ -24,23 +31,12 @@ class BuscadorController < ApplicationController
  ## MUSIMUNDO
  	 mechanizeMusimundo = Mechanize.new
  	 url = 'https://www.musimundo.com/'
+
 	 pageMusimundo = mechanizeMusimundo.get(url)
 	 form = pageMusimundo.forms.first
 	 form['text'] = 'notebook'
 	 pageMusimundo = form.submit
 
-
-     # @arrayMusimundo = []
-     # pageMusimundo.css('a img').each do |h3|
-     #      if h3.attr('title') != nil  and h3.attr('title').include? 'NOTEBOOK'
-     #     	 @arrayMusimundo << h3.attr('src')
-     #  	  end
-     #  end
-
-     # @precios = []
-     # pageMusimundo.css('.mus-pro-price-number span').each do |h|
-     #     	 @precios << h.text.strip
-     # end
      cantidad = 0
      @arrayMusimundo = []
      pageMusimundo.css('a').each do |a|
@@ -62,7 +58,7 @@ class BuscadorController < ApplicationController
            mechanize2 = Mechanize.new
 		   url2 = producto.link
 		   page2 = mechanize2.get(url2)
-		   producto.info =page2.css('#general p').text
+		   producto.info =page2.css('#general').text.strip
 		   cantidad = cantidad + 1
            @arrayMusimundo << producto
 
@@ -100,7 +96,7 @@ class BuscadorController < ApplicationController
 	      	 mechanize2 = Mechanize.new
 		     url2 = producto.link
 		     page2 = mechanize2.get(url2)
-		     producto.info =page2.css('section section').text
+		     producto.info =page2.css('#description-includes').text.split(" ").first(500).join(" ")
              @entriesArray2 << producto
 	  	 	 cantidad = cantidad + 1
 	  	else
@@ -143,7 +139,15 @@ class BuscadorController < ApplicationController
      	   		producto.url = l.css('figure img.productImage').attr("src").text
 	 			producto.precio_ant = l.css('p span.pricestyled__ListPrice-sc-1cju1pf-0').text
 	 			producto.precio =l.css('p > text()')[0].text
-	 			@entriesArray << producto
+	 			mechanize_frav_2 = Mechanize.new
+			    url2 = producto.link
+			    page2 = mechanize_frav_2.get(url2)
+			    	
+			    producto.info = page2.css('div.DescriptionText__Bajada-sc-14hdqca-2').text.strip	 			
+			    if producto.info == ""
+			    	producto.info = page2.css('.description').text
+			    end
+			    @entriesArray << producto
 	 			cantidad = cantidad + 1
 
 	 		end
