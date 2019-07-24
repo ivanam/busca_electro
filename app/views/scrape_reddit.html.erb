@@ -2,10 +2,9 @@
 <style type="text/css">
 .wrap{
   width: 30%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, 100%);
+  position: relative;
+  top:-150px;
+
 }
 .titulos {
   font: small-caps 100% serif;
@@ -43,11 +42,12 @@
    <form action="" method="GET" class="form-horizontal" role="form">
       <div class="form-group">
           <input class="text" style="font-size:15px;" id="producto"></input>          <%= select_tag :cantidad, options_for_select([[1, 1],[2, 2], [3, 3], [4, 4], [5, 5]], 0,), {:prompt => "Cantidad",  :id => "cantidad", :class => "cantidad" }%>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="boton" class="btn btn-secondary btn-lg"><span class="glyphicon glyphicon-search"> </span></button>
-  
+  <center><div><h5>*Cantidad: es la cantidad de elementos que se van a listar</h5></div></center>
       </div>
   </form>
 </div>
 </center>
+
 
 
 
