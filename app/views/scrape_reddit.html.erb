@@ -30,6 +30,10 @@
    font-family: Arial, Helvetica, Verdana, sans-serif;
    font-size: 180%;
 }
+.cantidad {
+
+  font-size:180%;
+}
 </style>
 
 
@@ -38,11 +42,14 @@
   <div class="wrap">
    <form action="" method="GET" class="form-horizontal" role="form">
       <div class="form-group">
-          <input class="text" style="font-size:15px;" id="producto"></input>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="boton" class="btn btn-secondary btn-lg"><span class="glyphicon glyphicon-search"> </span></button>
+          <input class="text" style="font-size:15px;" id="producto"></input>          <%= select_tag :cantidad, options_for_select([[1, 1],[2, 2], [3, 3], [4, 4], [5, 5]], 0,), {:prompt => "Cantidad",  :id => "cantidad", :class => "cantidad" }%>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="boton" class="btn btn-secondary btn-lg"><span class="glyphicon glyphicon-search"> </span></button>
+  
       </div>
   </form>
 </div>
 </center>
+
+
 
 <%if @entriesArray != nil and @entriesArray2 != nil and @arrayMusimundo != nil%>
 <br></br>
@@ -63,7 +70,7 @@
         <center><h2><p class="precios"><strong><%= en.precio%></strong></p></h2></center>
         <center><p>PRECIO ANTERIOR:<b class="precio_anterior"><%= en.precio_ant%></b></p></center>
         <center><p><strong><%= en.cuotas%></strong></p></center>
-        <center><button type="button" id="boton" class="btn btn-secondary btn-lg"><a data-toggle="modal" info="<%=en.info%>" data-target="#myModal" title="Editar" ><span class=class="glyphicon glyphicon-search" >+ Información</span></a></button></center>
+        <center><button type="button" id="boton" class="btn btn-secondary btn-lg"><a data-toggle="modal" info="<%=en.info%>" data-target="#myModal" title="informaciòn" ><span class=class="glyphicon glyphicon-search" >+ Información</span></a></button></center>
         <br></br>
         <center><p></i><a class="glyphicon glyphicon-shopping-cart" id="carrito" href="<%=en.link%>"> COMPRAR</a></p></center>
 
@@ -151,28 +158,67 @@
 
 <script type="text/javascript">
 
+    $('#myModal').modal('hide');
+
+    //Cuando abro el modla le seteo la info del producto enviada por paràmetro
     $('#myModal').on('shown.bs.modal', function (event) {      
       info = $(event.relatedTarget).attr('info');
       $("#info_prod").html("<b>"+info+"</b>");
-
-      
     });
 
-      $('#myModal').modal('hide');
-      
-      $( "#boton" ).click( function() {
-
-      var producto = $( "#producto" ).val();
-      
-      window.location = "/buscador/"+producto;
-
-    });
-       $( "#info" ).click( function() {
-      
-      window.location = "/buscador/";
-
+    // Al esconder el modal , limpio el campo #info_prod
+    $('#myModal').on('hidden.bs.modal', function (e) {
+      $("#info_prod").val("");
     });
 
+    
+    $( "#boton" ).click( function() {
+      
+    if (($("#producto").val() != "") && ($("#producto").val() != undefined)) {
+
+      if (($("#cantidad").val() != "") && ($("#cantidad").val() != undefined)){
+
+          var producto = $( "#producto" ).val();
+          var cantidad = $( "#cantidad" ).val();
+          window.location = '/buscador/?producto='+producto+'&cantidad='+cantidad;
+
+      }else{
+
+        alert("seleccione la cantidad de productos que desea visualizar");
+      }
+
+    }else{    
+    alert("Ingrese el nombre de un producto válido");
+    }
+
+    });
+
+  //obtengo los paràmetros de la url
+    $.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results == null){
+      return 0;
+    }else{
+      return results[1] || 0;
+    }
+  }
+
+  //a partir d elos parámetros de la url, seteo el select y el input dé búqueda
+  if ($.urlParam('producto') != 0 ){
+      var producto = $.urlParam('producto');
+      var cantidad = $.urlParam('cantidad');
+      producto =  producto.replace("%20"," ");
+      $("#producto").val(producto);
+      $("#cantidad").val(cantidad);
+    }
+
+    //evitar la tecla enter en el inout de bùqueda
+    $('form input').keydown(function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
 </script>
 
 

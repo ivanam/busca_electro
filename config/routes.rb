@@ -2,8 +2,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'application#scrape_reddit'
 
-  get "/buscador/:data", to: 'buscador#buscar'
+  get "/buscador/", to: 'buscador#buscar'
 
-  get "info", to: 'buscador#info', as: :info
  
 end

@@ -1,18 +1,15 @@
 class BuscadorController < ApplicationController
 
-def info
-
-	respond_to do |format|
-    	format.html
-    	format.js
-   	end
-end
 
  def buscar
     require 'open-uri'
     require 'mechanize'
     require 'ostruct'
-    cantidad_maxima = 5
+    #recibo por paramtero la cantidad y el nombre del producto
+    cantidad_maxima = params["cantidad"]
+    cantidad_maxima = cantidad_maxima.to_i
+    electro = params["producto"]
+
 
 
     
@@ -21,9 +18,9 @@ end
 #obtener nombre del producto desde la vista
 #ESTO ES PARA MANDAR AL INCLUDE DE ABAJO
 #name.upcase
-#name.upcase
-#name
-#@all_image_urls = page.css('img').select{|img| img[:src] if img[:width].to_i > 100}
+#name.downcase
+#name.capitalize
+#name.titleize
 
 
 
@@ -31,22 +28,24 @@ end
  ## MUSIMUNDO
  	 mechanizeMusimundo = Mechanize.new
  	 url = 'https://www.musimundo.com/'
-
+ 	 #obtengo la pagina
 	 pageMusimundo = mechanizeMusimundo.get(url)
+	 #busco el formualri opara ingresar una bùqueda
 	 form = pageMusimundo.forms.first
-	 form['text'] = 'notebook'
+	 form['text'] = electro
+	 #hago un submit dle form de la pàgina con el nombre del producto
 	 pageMusimundo = form.submit
-
+	 #inicializo la variable
      cantidad = 0
      @arrayMusimundo = []
      pageMusimundo.css('a').each do |a|
-     	if a.attr('title')  != nil and a.attr('title').include? 'NOTEBOOK' and cantidad < cantidad_maxima
+     	if a.attr('title')  != nil and (a.attr('title').include? electro or a.attr('title').include? electro.upcase or a.attr('title').include? electro.downcase or a.attr('title').include? electro.titleize) and cantidad < cantidad_maxima
      	  
      	   producto = OpenStruct.new
      	   url_base = a.attr('href')
      	   producto.link = url + url_base
      	   a.css('img').each do |h3|
-	           	if h3.attr('title') != nil  and h3.attr('title').include? 'NOTEBOOK'
+	           	if h3.attr('title') != nil  and (h3.attr('title').include? electro or h3.attr('title').include? electro.upcase or h3.attr('title').include? electro.downcase or h3.attr('title').include? electro.titleize)
 	          	 	producto.url = h3.attr('src')
 	       	  	end
        	   end
@@ -73,7 +72,7 @@ end
  	 mechanize3 = Mechanize.new
 	 page2 = mechanize3.get('https://www.mercadolibre.com.ar/')
 	 form = page2.forms.first
-	 form['as_word'] = 'notebook'
+	 form['as_word'] = electro
 	 page2 = form.submit
 	 @entriesArray2 = []
 	 cantidad = 0
@@ -108,19 +107,20 @@ end
 	
      #####FRAVEGA
      mechanize = Mechanize.new
-     data = params["data"]
      url = "https://www.fravega.com/"
-	 page = mechanize.get(url +'l/'+ data)
-
+	 page = mechanize.get(url +'l/'+ electro)
+	
 	 @entriesArray = []
 	 cantidad = 0
 	 titulo = ""
 	 listado = page.css('ul li a')
+
+	 #listado =page.css('ul li').select{|a| a[:title] if a[:title] != nil}
 	 listado.each do |l|
 	 	
 	 	if cantidad < cantidad_maxima
-
-	 		if l.attr('title') != nil and l.attr('title').include? 'Notebook' and l.css('img').any? and l.css('span').any? and l.attr('href') != "" and titulo != l.attr('title')
+	 		
+	 		if l.attr('title') != nil and (l.attr('title').include? electro or l.attr('title').include? electro.upcase or l.attr('title').include? electro.downcase or l.attr('title').include? electro.titleize) and l.css('img').any? and l.css('span').any? and l.attr('href') != "" and titulo != l.attr('title')
 	 			
 	 			producto = OpenStruct.new
 	 			titulo = l.attr('title')
